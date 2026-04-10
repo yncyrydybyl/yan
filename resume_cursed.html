@@ -297,15 +297,15 @@
   }
 </style>
 </head>
-<body>
+<body class="serious">
 
 <div class="toggle-bar">
-  <span id="label-cursed" class="active-label">Cursed</span>
+  <span id="label-cursed">Cursed</span>
   <label class="switch">
-    <input type="checkbox" id="themeToggle">
+    <input type="checkbox" id="themeToggle" checked>
     <span class="slider"></span>
   </label>
-  <span id="label-serious">Serious</span>
+  <span id="label-serious" class="active-label">Serious</span>
 </div>
 
 <div class="wrapper">
@@ -441,10 +441,38 @@
   const labelCursed = document.getElementById('label-cursed');
   const labelSerious = document.getElementById('label-serious');
 
+  function playWarp() {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.type = 'sawtooth';
+    const now = ctx.currentTime;
+
+    if (toggle.checked) {
+      // warp DOWN — going serious
+      osc.frequency.setValueAtTime(800, now);
+      osc.frequency.exponentialRampToValueAtTime(120, now + 0.35);
+    } else {
+      // warp UP — going cursed
+      osc.frequency.setValueAtTime(120, now);
+      osc.frequency.exponentialRampToValueAtTime(1200, now + 0.35);
+    }
+
+    gain.gain.setValueAtTime(0.25, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+
+    osc.start(now);
+    osc.stop(now + 0.4);
+  }
+
   toggle.addEventListener('change', () => {
     document.body.classList.toggle('serious', toggle.checked);
     labelCursed.classList.toggle('active-label', !toggle.checked);
     labelSerious.classList.toggle('active-label', toggle.checked);
+    playWarp();
   });
 </script>
 
