@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Bungee+Shade&family=Lacquer&family=Rubik+Glitch&family=Silkscreen&family=Mystery+Quest&family=Ewert&family=Inter:wght@400;500;600;700&display=swap');
+
+  /* ── Toggle switch ── */
+  .toggle-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 10px;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+  }
+  .toggle-bar span { color: #aaa; }
+  .toggle-bar .active-label { color: #fff; font-weight: 600; }
+
+  .switch {
+    position: relative;
+    width: 50px;
+    height: 26px;
+  }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider {
+    position: absolute;
+    inset: 0;
+    background: #ff00ff;
+    border-radius: 26px;
+    cursor: pointer;
+    transition: background 0.4s;
+  }
+  .slider::before {
+    content: '';
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.4s;
+  }
+  .switch input:checked + .slider { background: #2563eb; }
+  .switch input:checked + .slider::before { transform: translateX(24px); }
+
+  @media print { .toggle-bar { display: none; } }
+
+  /* ── Cursed theme (default) ── */
+  body {
+    background: linear-gradient(135deg, #ff00ff, #00ffff, #ff6600, #39ff14, #ff0066);
+    background-size: 400% 400%;
+    margin: 0;
+    padding: 60px 30px 30px;
+    font-family: 'Mystery Quest', cursive;
+    color: #ffff00;
+    font-size: 11px;
+    line-height: 1.4;
+    transition: all 0.5s ease;
+  }
+
+  h1 {
+    font-family: 'Bungee Shade', cursive;
+    font-size: 42px;
+    color: #ff0066;
+    text-shadow: 4px 4px 0 #00ff00, -2px -2px 0 #0000ff, 6px 6px 8px rgba(255,0,255,0.5);
+    text-align: center;
+    transform: rotate(-2deg);
+    letter-spacing: 5px;
+    margin-bottom: 5px;
+    transition: all 0.5s ease;
+  }
+
+  .contact {
+    font-family: 'Silkscreen', monospace;
+    text-align: center;
+    color: #00ff00;
+    font-size: 9px;
+    background: #330033;
+    padding: 8px;
+    border: 3px dashed #ff6600;
+    margin-bottom: 15px;
+    transition: all 0.5s ease;
+  }
+
+  h2 {
+    font-family: 'Creepster', cursive;
+    font-size: 26px;
+    color: #39ff14;
+    text-shadow: 3px 3px 0 #ff0000;
+    border-bottom: 4px dotted #ff00ff;
+    padding-bottom: 4px;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    transform: skewX(-3deg);
+    transition: all 0.5s ease;
+  }
+
+  h3 {
+    font-family: 'Lacquer', cursive;
+    font-size: 14px;
+    color: #ff6600;
+    margin: 10px 0 2px 0;
+    text-shadow: 2px 2px 0 #0000ff;
+    transition: all 0.5s ease;
+  }
+
+  .date {
+    font-family: 'Rubik Glitch', cursive;
+    color: #00ffff;
+    font-size: 10px;
+    transition: all 0.5s ease;
+  }
+
+  .location {
+    font-family: 'Ewert', cursive;
+    color: #ff00ff;
+    font-size: 10px;
+    transition: all 0.5s ease;
+  }
+
+  ul {
+    list-style-type: '\1F480 ';
+    padding-left: 25px;
+    margin: 4px 0;
+    transition: all 0.5s ease;
+  }
+
+  li {
+    color: #ffff00;
+    margin-bottom: 3px;
+    font-size: 10px;
+    transition: all 0.5s ease;
+  }
+
+  p {
+    transition: all 0.5s ease;
+  }
+
+  .skills {
+    font-family: 'Silkscreen', monospace;
+    color: #ff0066;
+    background: linear-gradient(90deg, #000066, #003300, #330000);
+    padding: 10px;
+    border: 3px double #00ffff;
+    font-size: 10px;
+    letter-spacing: 1px;
+    transition: all 0.5s ease;
+  }
+
+  .languages {
+    font-family: 'Creepster', cursive;
+    color: #39ff14;
+    font-size: 14px;
+    transition: all 0.5s ease;
+  }
+
+  .divider {
+    border: none;
+    height: 4px;
+    background: repeating-linear-gradient(90deg, #ff0000, #ff7700, #ffff00, #00ff00, #0000ff, #8b00ff, #ff0000);
+    background-size: 200px;
+    margin: 10px 0;
+    transition: all 0.5s ease;
+  }
+
+  .wrapper {
+    max-width: 700px;
+    margin: 0 auto;
+    background: rgba(0, 0, 0, 0.75);
+    padding: 30px;
+    border: 5px solid;
+    border-image: repeating-linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet) 5;
+    transition: all 0.5s ease;
+  }
+
+  /* ── Serious theme ── */
+  body.serious {
+    background: #ffffff;
+    font-family: 'Inter', sans-serif;
+    color: #1f2937;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+
+  body.serious .wrapper {
+    background: #ffffff;
+    border: none;
+    border-image: none;
+    padding: 40px 50px;
+    max-width: 750px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+
+  body.serious h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #111827;
+    text-shadow: none;
+    transform: none;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+
+  body.serious .contact {
+    font-family: 'Inter', sans-serif;
+    color: #4b5563;
+    font-size: 11px;
+    background: none;
+    border: none;
+    padding: 0;
+    margin-bottom: 20px;
+    border-bottom: none;
+  }
+
+  body.serious h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #111827;
+    text-shadow: none;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    border-bottom: 2px solid #111827;
+    transform: none;
+    padding-bottom: 4px;
+    margin-top: 22px;
+    margin-bottom: 10px;
+  }
+
+  body.serious h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #111827;
+    text-shadow: none;
+    margin: 12px 0 1px 0;
+  }
+
+  body.serious .date {
+    font-family: 'Inter', sans-serif;
+    color: #6b7280;
+    font-size: 11px;
+  }
+
+  body.serious .location {
+    font-family: 'Inter', sans-serif;
+    color: #9ca3af;
+    font-size: 11px;
+  }
+
+  body.serious ul {
+    list-style-type: disc;
+    padding-left: 20px;
+  }
+
+  body.serious li {
+    color: #374151;
+    font-size: 11px;
+    margin-bottom: 2px;
+  }
+
+  body.serious p {
+    color: #374151;
+  }
+
+  body.serious .skills {
+    font-family: 'Inter', sans-serif;
+    color: #374151;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    font-size: 11px;
+    letter-spacing: 0;
+    padding: 12px;
+  }
+
+  body.serious .languages {
+    font-family: 'Inter', sans-serif;
+    color: #374151;
+    font-size: 12px;
+  }
+
+  body.serious .divider {
+    height: 1px;
+    background: #e5e7eb;
+  }
+</style>
+</head>
+<body>
+
+<div class="toggle-bar">
+  <span id="label-cursed" class="active-label">Cursed</span>
+  <label class="switch">
+    <input type="checkbox" id="themeToggle">
+    <span class="slider"></span>
+  </label>
+  <span id="label-serious">Serious</span>
+</div>
+
+<div class="wrapper">
+
+<h1>Yan Minagawa</h1>
+
+<div class="contact">
+  +49 175 5550564 | yan.minagawa@element.io | linkedin.com/in/yncyrydybyl | Berlin Metropolitan Area
+</div>
+
+<hr class="divider">
+
+<h2>Summary</h2>
+<p>Solutions Architect with 20+ years of experience spanning DevOps, solution architecture, and strategic consulting. Currently delivering sovereign and secure communications for governments at Element, the creators of the Matrix protocol. Track record of leading development teams, driving business development, and building products across mobility, infrastructure, and open-source ecosystems.</p>
+
+<hr class="divider">
+
+<h2>Skills</h2>
+<div class="skills">
+  DevOps // Solution Architecture // Strategic Consulting // Technical Sales // Business Development // Linux Administration // Mail Server Infrastructure // IaaS // Mobile Development // API Design // Stakeholder Management // Startup Mentoring
+</div>
+
+<hr class="divider">
+
+<h2>Languages</h2>
+<div class="languages">
+  English &nbsp;&nbsp;&nbsp; German
+</div>
+
+<hr class="divider">
+
+<h2>Experience</h2>
+
+<h3>Solutions Architect | Element</h3>
+<div class="date">November 2022 - Present</div>
+<div class="location">London, England, United Kingdom</div>
+<ul>
+  <li>Architect sovereign and secure communications solutions for government clients using the Matrix protocol</li>
+  <li>Design and deliver end-to-end solution architectures for enterprise and public sector deployments</li>
+</ul>
+
+<h3>Founding Member | Datanauten</h3>
+<div class="date">November 2021 - Present</div>
+<div class="location">Germany</div>
+
+<h3>Technical Lead | ride2go GmbH</h3>
+<div class="date">May 2020 - May 2021</div>
+<div class="location">Berlin</div>
+
+<h3>Parental Leave</h3>
+<div class="date">May 2019 - May 2020</div>
+<div class="location">Berlin</div>
+
+<h3>Head of Development | Heinlein Professional Linux Support GmbH</h3>
+<div class="date">November 2014 - May 2019</div>
+<div class="location">Berlin, Germany</div>
+<ul>
+  <li>Led the development team at Heinlein Support and mailbox.org</li>
+  <li>Managed engineering direction for Linux-based hosting and mail server infrastructure</li>
+</ul>
+
+<h3>Business Development and Sales | Heinlein Professional Linux Support GmbH</h3>
+<div class="date">July 2013 - November 2014</div>
+<div class="location">Berlin, Germany</div>
+<ul>
+  <li>Managed client relationships for hosting, consulting, and mail server projects</li>
+  <li>Contributed to Heinlein Akademie training programs and conferences (SLAC, Mail Server Conference)</li>
+</ul>
+
+<h3>Business Development | Novoda</h3>
+<div class="date">August 2013 - 2014</div>
+<ul>
+  <li>Developed strategic partnerships and managed client relationships at a leading Android consultancy</li>
+</ul>
+
+<h3>Free Floating Car Sharing App | mobile++ Enhanced Mobility</h3>
+<div class="date">March 2013 - June 2013</div>
+<ul>
+  <li>Coordinated developers, UX specialists, and business innovators to build a mobile client for urban mobility services</li>
+</ul>
+
+<h3>Technical Sales Consultant | ProfitBricks</h3>
+<div class="date">May 2012 - June 2013</div>
+<ul>
+  <li>Provided technical advisory services for IaaS customers and prospective clients</li>
+</ul>
+
+<h3>Innovation Scout and Technology Evangelist | ImmobilienScout24</h3>
+<div class="date">May 2012 - June 2013</div>
+<ul>
+  <li>Organized events and innovation formats at the startup incubator "YOU IS NOW"</li>
+  <li>Bridged the gap between young entrepreneurs and Germany's largest real estate platform</li>
+  <li>Mentored startups on technology, strategy, and partnerships</li>
+</ul>
+
+<h3>RideSharing Community Platform | fahrgemeinschaft.de</h3>
+<div class="date">September 2011 - May 2013</div>
+<ul>
+  <li>Planned and coordinated the web portal and mobile applications</li>
+  <li>Created a B2B platform for routing information exchange</li>
+</ul>
+
+<h3>Co-founder and Developer | my2cents</h3>
+<div class="date">2010 - 2011</div>
+<ul>
+  <li>Co-founded and developed the ProsumerPortal, a mobile product information platform</li>
+</ul>
+
+<h3>API Evangelist | moviepilot GmbH</h3>
+<div class="date">2009 - 2010</div>
+<ul>
+  <li>Collaborated with clients, partners, and the in-house developer team</li>
+  <li>Delivered projects to support company growth</li>
+  <li>Documented and published API and technology resources</li>
+</ul>
+
+<h3>Information Technologist | buero michael schoebel</h3>
+<div class="date">2004 - 2010</div>
+<ul>
+  <li>Managed all IT operations for an artist management agency</li>
+</ul>
+
+<h3>Researcher and Worker | ESP Metanational LLP</h3>
+<div class="date">2004 - 2009</div>
+<ul>
+  <li>Conducted research and project work focused on next-generation internet technologies within a technology-driven collective</li>
+</ul>
+
+</div>
+
+<script>
+  const toggle = document.getElementById('themeToggle');
+  const labelCursed = document.getElementById('label-cursed');
+  const labelSerious = document.getElementById('label-serious');
+
+  toggle.addEventListener('change', () => {
+    document.body.classList.toggle('serious', toggle.checked);
+    labelCursed.classList.toggle('active-label', !toggle.checked);
+    labelSerious.classList.toggle('active-label', toggle.checked);
+  });
+</script>
+
+</body>
+</html>
