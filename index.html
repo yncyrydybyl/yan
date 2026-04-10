@@ -56,22 +56,14 @@
 
   @media print {
     .toggle-bar { display: none !important; }
-    body {
-      padding: 0 !important; margin: 0 !important;
+    * {
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
       color-adjust: exact !important;
     }
-    body, .wrapper, h1, h2, h3, .contact, .date, .location, p, li, .skills, .languages, .divider {
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
-    }
-    .wrapper {
-      box-shadow: none !important; border: none !important; border-image: none !important;
-      border-radius: 0 !important; max-width: 100% !important;
-      padding: 24px 36px !important; margin: 0 !important;
-    }
-    @page { margin: 12mm 10mm; size: A4; }
+    body { padding: 20px !important; margin: 0 !important; }
+    .wrapper { max-width: 100% !important; margin: 0 !important; }
+    @page { margin: 8mm; size: A4; }
     h2, h3 { break-after: avoid !important; }
     ul { break-inside: avoid !important; }
   }

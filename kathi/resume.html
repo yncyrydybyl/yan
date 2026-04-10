@@ -9,52 +9,36 @@
 
   *, *::before, *::after { box-sizing: border-box; }
 
-  /* ─── Print / PDF ─── */
+  /* ─── Print / PDF — screen-faithful output ─── */
   @media print {
     .controls { display: none !important; }
 
-    body {
-      padding: 0 !important;
-      margin: 0 !important;
+    /* Preserve ALL screen colors, backgrounds, gradients in PDF */
+    * {
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
       color-adjust: exact !important;
     }
 
-    .resume {
-      box-shadow: none !important;
-      border: none !important;
-      border-radius: 0 !important;
-      max-width: 100% !important;
-      padding: 28px 36px !important;
+    body {
+      padding: 20px !important;
       margin: 0 !important;
     }
 
-    /* Keep themed backgrounds and colors for PDF output */
-    body, .resume, h1, h2, h3, .subtitle, .meta, p, li, .section-grid span, hr {
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
+    .resume {
+      max-width: 100% !important;
+      margin: 0 !important;
     }
 
-    /* Page margins and break control */
+    /* Minimal page margins — maximize screen-like appearance */
     @page {
-      margin: 12mm 10mm;
+      margin: 8mm;
       size: A4;
     }
 
-    h2, h3 {
-      break-after: avoid !important;
-    }
-    ul, .section-grid {
-      break-inside: avoid !important;
-    }
-
-    /* Ensure dark/gradient backgrounds actually render */
-    body[class*="t-dark"], body[class*="t-terminal"], body[class*="t-vaporwave"],
-    body[class*="t-forest"], body[class*="t-sunset"], body[class*="t-blueprint"],
-    body[class*="t-cursed"], body[class*="t-glass"] {
-      background-attachment: fixed !important;
-    }
+    /* Keep content together */
+    h2, h3 { break-after: avoid !important; }
+    ul, .section-grid { break-inside: avoid !important; }
   }
 
   /* ─── Controls bar ─── */
@@ -490,21 +474,220 @@
 const picker = document.getElementById('themePicker');
 const themes = [...picker.options].map(o => o.value);
 
-function playWarp() {
+// ── Per-theme sound design ──
+// Each theme gets a unique sound that matches its character.
+const themeSounds = {
+  't-professional': (ctx, t) => {
+    // Clean click — short sine pop
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = 'sine'; o.frequency.setValueAtTime(880, t);
+    g.gain.setValueAtTime(0.2, t); g.gain.exponentialRampToValueAtTime(0.001, t+0.08);
+    o.start(t); o.stop(t+0.08);
+  },
+  't-dark': (ctx, t) => {
+    // Deep thud — low sine with quick decay
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = 'sine'; o.frequency.setValueAtTime(60, t); o.frequency.exponentialRampToValueAtTime(30, t+0.3);
+    g.gain.setValueAtTime(0.3, t); g.gain.exponentialRampToValueAtTime(0.001, t+0.3);
+    o.start(t); o.stop(t+0.3);
+  },
+  't-terminal': (ctx, t) => {
+    // Retro beep sequence — 3 fast square blips
+    for (let i = 0; i < 3; i++) {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.type = 'square'; o.frequency.setValueAtTime(800 + i*200, t + i*0.06);
+      g.gain.setValueAtTime(0.1, t + i*0.06); g.gain.exponentialRampToValueAtTime(0.001, t + i*0.06 + 0.04);
+      o.start(t + i*0.06); o.stop(t + i*0.06 + 0.05);
+    }
+  },
+  't-elegant': (ctx, t) => {
+    // Gentle chime — high sine with slow fade
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = 'sine'; o.frequency.setValueAtTime(1320, t);
+    g.gain.setValueAtTime(0.15, t); g.gain.exponentialRampToValueAtTime(0.001, t+0.6);
+    o.start(t); o.stop(t+0.6);
+    const o2 = ctx.createOscillator(), g2 = ctx.createGain();
+    o2.connect(g2); g2.connect(ctx.destination);
+    o2.type = 'sine'; o2.frequency.setValueAtTime(1760, t+0.05);
+    g2.gain.setValueAtTime(0.1, t+0.05); g2.gain.exponentialRampToValueAtTime(0.001, t+0.5);
+    o2.start(t+0.05); o2.stop(t+0.5);
+  },
+  't-minimalist': (ctx, t) => {
+    // Tiny tick — almost nothing
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = 'sine'; o.frequency.setValueAtTime(2000, t);
+    g.gain.setValueAtTime(0.08, t); g.gain.exponentialRampToValueAtTime(0.001, t+0.03);
+    o.start(t); o.stop(t+0.03);
+  },
+  't-cursed': (ctx, t) => {
+    // Chaotic warp — sawtooth sweep up then crash down
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = 'sawtooth';
+    o.frequency.setValueAtTime(80, t);
+    o.frequency.exponentialRampToValueAtTime(2000, t+0.2);
+    o.frequency.exponentialRampToValueAtTime(40, t+0.5);
+    g.gain.setValueAtTime(0.25, t); g.gain.exponentialRampToValueAtTime(0.001, t+0.5);
+    o.start(t); o.stop(t+0.5);
+  },
+  't-corporate': (ctx, t) => {
+    // Email notification ding — two-tone
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = 'sine'; o.frequency.setValueAtTime(523, t); o.frequency.setValueAtTime(659, t+0.1);
+    g.gain.setValueAtTime(0.15, t); g.gain.exponentialRampToValueAtTime(0.001, t+0.25);
+    o.start(t); o.stop(t+0.25);
+  },
+  't-pastel': (ctx, t) => {
+    // Soft bubble — sine with gentle wobble
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = 'sine';
+    o.frequency.setValueAtTime(600, t);
+    o.frequency.exponentialRampToValueAtTime(900, t+0.15);
+    o.frequency.exponentialRampToValueAtTime(700, t+0.3);
+    g.gain.setValueAtTime(0.12, t); g.gain.exponentialRampToValueAtTime(0.001, t+0.35);
+    o.start(t); o.stop(t+0.35);
+  },
+  't-bauhaus': (ctx, t) => {
+    // Industrial stamp — short noise burst + low tone
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = 'square'; o.frequency.setValueAtTime(120, t);
+    g.gain.setValueAtTime(0.2, t); g.gain.exponentialRampToValueAtTime(0.001, t+0.12);
+    o.start(t); o.stop(t+0.12);
+  },
+  't-vaporwave': (ctx, t) => {
+    // Dreamy shimmer — detuned sines
+    for (let f of [440, 554, 660]) {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.type = 'sine'; o.frequency.setValueAtTime(f, t);
+      o.detune.setValueAtTime(Math.random()*30 - 15, t);
+      g.gain.setValueAtTime(0.07, t); g.gain.exponentialRampToValueAtTime(0.001, t+0.8);
+      o.start(t); o.stop(t+0.8);
+    }
+  },
+  't-typewriter': (ctx, t) => {
+    // Typewriter key clack — noise-like
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = 'square'; o.frequency.setValueAtTime(4000, t);
+    g.gain.setValueAtTime(0.15, t); g.gain.exponentialRampToValueAtTime(0.001, t+0.02);
+    o.start(t); o.stop(t+0.03);
+    // carriage return
+    const o2 = ctx.createOscillator(), g2 = ctx.createGain();
+    o2.connect(g2); g2.connect(ctx.destination);
+    o2.type = 'triangle'; o2.frequency.setValueAtTime(300, t+0.04); o2.frequency.exponentialRampToValueAtTime(100, t+0.15);
+    g2.gain.setValueAtTime(0.1, t+0.04); g2.gain.exponentialRampToValueAtTime(0.001, t+0.15);
+    o2.start(t+0.04); o2.stop(t+0.15);
+  },
+  't-nordic': (ctx, t) => {
+    // Wind chime — triangle tone, gentle
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = 'triangle'; o.frequency.setValueAtTime(1047, t);
+    g.gain.setValueAtTime(0.12, t); g.gain.exponentialRampToValueAtTime(0.001, t+0.4);
+    o.start(t); o.stop(t+0.4);
+  },
+  't-forest': (ctx, t) => {
+    // Bird chirp — quick frequency sweep up
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = 'sine';
+    o.frequency.setValueAtTime(1200, t);
+    o.frequency.exponentialRampToValueAtTime(2400, t+0.08);
+    o.frequency.exponentialRampToValueAtTime(1800, t+0.15);
+    g.gain.setValueAtTime(0.15, t); g.gain.exponentialRampToValueAtTime(0.001, t+0.2);
+    o.start(t); o.stop(t+0.2);
+  },
+  't-sunset': (ctx, t) => {
+    // Warm glow — descending major third
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = 'sine'; o.frequency.setValueAtTime(660, t);
+    g.gain.setValueAtTime(0.15, t); g.gain.exponentialRampToValueAtTime(0.001, t+0.4);
+    o.start(t); o.stop(t+0.4);
+    const o2 = ctx.createOscillator(), g2 = ctx.createGain();
+    o2.connect(g2); g2.connect(ctx.destination);
+    o2.type = 'sine'; o2.frequency.setValueAtTime(523, t+0.12);
+    g2.gain.setValueAtTime(0.12, t+0.12); g2.gain.exponentialRampToValueAtTime(0.001, t+0.5);
+    o2.start(t+0.12); o2.stop(t+0.5);
+  },
+  't-blueprint': (ctx, t) => {
+    // Mechanical click — two short tones
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = 'square'; o.frequency.setValueAtTime(440, t);
+    g.gain.setValueAtTime(0.1, t); g.gain.exponentialRampToValueAtTime(0.001, t+0.04);
+    o.start(t); o.stop(t+0.05);
+    const o2 = ctx.createOscillator(), g2 = ctx.createGain();
+    o2.connect(g2); g2.connect(ctx.destination);
+    o2.type = 'square'; o2.frequency.setValueAtTime(660, t+0.06);
+    g2.gain.setValueAtTime(0.1, t+0.06); g2.gain.exponentialRampToValueAtTime(0.001, t+0.1);
+    o2.start(t+0.06); o2.stop(t+0.11);
+  },
+  't-vintage': (ctx, t) => {
+    // Gramophone crackle — low wobble
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = 'triangle'; o.frequency.setValueAtTime(200, t);
+    o.frequency.setValueAtTime(220, t+0.05);
+    o.frequency.setValueAtTime(190, t+0.1);
+    o.frequency.setValueAtTime(210, t+0.15);
+    g.gain.setValueAtTime(0.12, t); g.gain.exponentialRampToValueAtTime(0.001, t+0.25);
+    o.start(t); o.stop(t+0.25);
+  },
+  't-glass': (ctx, t) => {
+    // Glass tap — high sine with reverb feel (stacked harmonics)
+    for (let i = 0; i < 3; i++) {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.type = 'sine'; o.frequency.setValueAtTime(2000 + i*1000, t);
+      g.gain.setValueAtTime(0.06, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.3 - i*0.05);
+      o.start(t); o.stop(t + 0.3);
+    }
+  },
+  't-brutalist': (ctx, t) => {
+    // Concrete slam — low square burst
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = 'square'; o.frequency.setValueAtTime(80, t);
+    o.frequency.exponentialRampToValueAtTime(40, t+0.15);
+    g.gain.setValueAtTime(0.3, t); g.gain.exponentialRampToValueAtTime(0.001, t+0.15);
+    o.start(t); o.stop(t+0.15);
+  },
+  't-candy': (ctx, t) => {
+    // Bubbly pop — ascending bubbles
+    for (let i = 0; i < 4; i++) {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.type = 'sine';
+      o.frequency.setValueAtTime(500 + i*150, t + i*0.06);
+      g.gain.setValueAtTime(0.1, t + i*0.06); g.gain.exponentialRampToValueAtTime(0.001, t + i*0.06 + 0.08);
+      o.start(t + i*0.06); o.stop(t + i*0.06 + 0.09);
+    }
+  },
+  't-academic': (ctx, t) => {
+    // Page turn — soft white-ish swoosh via detuned triangles
+    const o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = 'triangle'; o.frequency.setValueAtTime(300, t);
+    o.frequency.exponentialRampToValueAtTime(150, t+0.2);
+    g.gain.setValueAtTime(0.1, t); g.gain.exponentialRampToValueAtTime(0.001, t+0.2);
+    o.start(t); o.stop(t+0.2);
+  }
+};
+
+function playThemeSound(themeId) {
   const ctx = new (window.AudioContext || window.webkitAudioContext)();
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  osc.connect(gain);
-  gain.connect(ctx.destination);
-  osc.type = 'sawtooth';
-  const now = ctx.currentTime;
-  osc.frequency.setValueAtTime(120, now);
-  osc.frequency.exponentialRampToValueAtTime(1200, now + 0.25);
-  osc.frequency.exponentialRampToValueAtTime(80, now + 0.4);
-  gain.gain.setValueAtTime(0.2, now);
-  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
-  osc.start(now);
-  osc.stop(now + 0.45);
+  const fn = themeSounds[themeId];
+  if (fn) fn(ctx, ctx.currentTime);
 }
 
 function setTheme(t, pushState) {
@@ -519,7 +702,7 @@ function setTheme(t, pushState) {
 
 picker.addEventListener('change', () => {
   setTheme(picker.value, true);
-  playWarp();
+  playThemeSound(picker.value);
 });
 
 // Read theme from URL
