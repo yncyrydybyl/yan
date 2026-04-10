@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Katharina Dude — CV Themes</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #0a0a0a;
+    color: #e0e0e0;
+    padding: 40px 24px;
+  }
+
+  header {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 20px;
+  }
+  header h1 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  header p {
+    color: #888;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  header .pdf-hint {
+    margin-top: 16px;
+    padding: 12px 20px;
+    background: #1a1a2e;
+    border: 1px solid #2563eb;
+    border-radius: 8px;
+    color: #93c5fd;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 24px;
+    max-width: 1400px;
+    margin: 32px auto 0;
+  }
+
+  .card {
+    background: #141414;
+    border: 1px solid #222;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  }
+
+  .preview {
+    position: relative;
+    width: 100%;
+    height: 260px;
+    overflow: hidden;
+    background: #1a1a1a;
+  }
+  .preview iframe {
+    width: 780px;
+    height: 1100px;
+    border: none;
+    transform: scale(0.44);
+    transform-origin: top left;
+    pointer-events: none;
+  }
+
+  .info {
+    padding: 16px 20px;
+  }
+  .info h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .info .focus {
+    font-size: 11px;
+    color: #2563eb;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .info p {
+    font-size: 12px;
+    color: #888;
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .actions {
+    display: flex; gap: 8px;
+  }
+  .actions a {
+    flex: 1;
+    text-align: center;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .btn-view {
+    background: #2563eb;
+    color: #fff;
+  }
+  .btn-view:hover { background: #1d4ed8; }
+  .btn-pdf {
+    background: #1a1a2e;
+    color: #93c5fd;
+    border: 1px solid #2563eb;
+  }
+  .btn-pdf:hover { background: #1e293b; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Katharina Dude</h1>
+  <p>20 CV-Themes — jedes hebt einen anderen Aspekt ihres Profils hervor.<br>
+  Klicke auf ein Theme, um die volle Version zu sehen.</p>
+  <div class="pdf-hint">
+    <strong>PDF erstellen:</strong> Jedes Theme hat einen "Save as PDF"-Button.
+    Alternativ: Theme oeffnen &rarr; Ctrl+P (Cmd+P) &rarr; "Als PDF speichern".
+    Die Druckansicht blendet die Steuerleiste automatisch aus.
+  </div>
+</header>
+
+<div class="grid" id="grid"></div>
+
+<script>
+const themes = [
+  {
+    id: 't-professional',
+    name: '1 — Professional',
+    focus: 'ATS-Optimiert',
+    desc: 'Klassisch, klar, maschinell lesbar. Perfekt fuer Bewerbungsportale und HR-Software. Betont die strukturierte Karriere und Fachkompetenz.'
+  },
+  {
+    id: 't-dark',
+    name: '2 — Dark Mode',
+    focus: 'Digitale Kompetenz',
+    desc: 'Modern und digital-nativ. Unterstreicht Kathis Staerken in Remote-Sales, digitaler Kollaboration und Toolkompetenz (Miro, Slack, Jira).'
+  },
+  {
+    id: 't-terminal',
+    name: '3 — Terminal',
+    focus: 'Tech-Naehe',
+    desc: 'Monospace-Aesthetik fuer die technischere Seite: Scrum Product Owner, KI-Tools, agile Methoden — zeigt Bruecke zwischen HR und Tech.'
+  },
+  {
+    id: 't-elegant',
+    name: '4 — Elegant Gold',
+    focus: 'Executive Coaching',
+    desc: 'Goldakzente auf warmem Grund. Spiegelt die Seniorität als Business Coach (DGFP) und die Arbeit mit Fuehrungskraeften wider.'
+  },
+  {
+    id: 't-minimalist',
+    name: '5 — Minimalist',
+    focus: 'Klarheit & Strategie',
+    desc: 'Viel Weissraum, reduziert auf das Wesentliche. Wie Kathis strategische Beratung: praezise, fokussiert, auf den Punkt.'
+  },
+  {
+    id: 't-cursed',
+    name: '6 — Neon Cursed',
+    focus: 'Kreativitaet & Mut',
+    desc: 'Totaler Regelbruch. Erinnert an den Mut zur Neuorientierung — 11 Monate Neuseeland und Pazifik. Nicht fuer die Personalabteilung.'
+  },
+  {
+    id: 't-corporate',
+    name: '7 — Corporate Blue',
+    focus: 'Konzernkarriere',
+    desc: 'Strukturiert und serioes. Betont die Stationen bei JOST Werke, BIOTRONIK und Laurent Reifen — globale Personalentwicklung im Konzern.'
+  },
+  {
+    id: 't-pastel',
+    name: '8 — Pastel',
+    focus: 'Empathie & Mentoring',
+    desc: 'Weich und einladend. Reflektiert das Mentoring — Jumpp Frauenbetriebe, DREAM Dahlem Research School, Netzwerkarbeit in Frankfurt.'
+  },
+  {
+    id: 't-bauhaus',
+    name: '9 — Bauhaus',
+    focus: 'Change Management',
+    desc: 'Form follows function, radikal und geometrisch. Wie Change Management: klare Strukturen schaffen, Wandel gestalten, Neues bauen.'
+  },
+  {
+    id: 't-vaporwave',
+    name: '10 — Vaporwave',
+    focus: 'Zukunft der Arbeit',
+    desc: 'Retro-futuristisch. Workation, Remote-Sales, virtuelle Workshops — Kathi lebt die neue Arbeitswelt, bevor sie Mainstream wurde.'
+  },
+  {
+    id: 't-typewriter',
+    name: '11 — Typewriter',
+    focus: 'Paedagogische Wurzeln',
+    desc: 'Klassische Schreibmaschine. Verweist auf das Diplom-Paedagogik-Studium an der FU Berlin und die Liebe zur Erwachsenenbildung.'
+  },
+  {
+    id: 't-nordic',
+    name: '12 — Nordic',
+    focus: 'Qualitaet & Audits',
+    desc: 'Skandinavisch klar und ruhig. Wie die Qualitaetssicherung und internationalen HR-Audits bei JOST Werke — praezise Standards.'
+  },
+  {
+    id: 't-forest',
+    name: '13 — Forest',
+    focus: 'Nachhaltigkeit',
+    desc: 'Tiefes Gruen, organisch. Nachhaltige Organisationsentwicklung ist Kathis Kernfokus — langfristiges Wachstum statt Quick Fixes.'
+  },
+  {
+    id: 't-sunset',
+    name: '14 — Sunset',
+    focus: 'Interkulturell',
+    desc: 'Warme Farben der Pazifik-Region. Neuseeland-Aufenthalt, verhandlungssicheres Englisch, internationale Coaching-Erfahrung.'
+  },
+  {
+    id: 't-blueprint',
+    name: '15 — Blueprint',
+    focus: 'Projektmanagement',
+    desc: 'Technischer Bauplan. Steht fuer die Konzeption und Steuerung komplexer HR-Projekte — Qualifikationsmatrix, Demografiefonds, L&D.'
+  },
+  {
+    id: 't-vintage',
+    name: '16 — Vintage',
+    focus: '20+ Jahre Erfahrung',
+    desc: 'Zeitlos und bestaendig. Ueber zwei Jahrzehnte Berufserfahrung von der Arzthelferin zur strategischen HR-Beraterin — ein langer Weg.'
+  },
+  {
+    id: 't-glass',
+    name: '17 — Glassmorphism',
+    focus: 'Transparenz & Vertrauen',
+    desc: 'Durchsichtig und modern. Wie Kathis Arbeit mit Betriebsraeten: Transparenz, Vertrauensarbeit, offene Kommunikation.'
+  },
+  {
+    id: 't-brutalist',
+    name: '18 — Brutalist',
+    focus: 'Klartext & Impact',
+    desc: 'Roh, direkt, wuchtig. Revenue Growth, End-to-End Vertrieb, Full Cycle Recruiting — Ergebnisse statt Buzzwords.'
+  },
+  {
+    id: 't-candy',
+    name: '19 — Candy',
+    focus: 'Community & Netzwerk',
+    desc: 'Verspielt und verbindend. Gruendung eines HR-Netzwerks in Frankfurt, Event-Management, Frauenfoerderung — Community Building.'
+  },
+  {
+    id: 't-academic',
+    name: '20 — Academic',
+    focus: 'Wissenschaft & Bildung',
+    desc: 'Akademische Serife. Diplom-Paedagogik (FU Berlin), systemische Organisationsentwicklung, Transaktionsanalyse — theoretisch fundiert.'
+  }
+];
+
+const grid = document.getElementById('grid');
+
+themes.forEach(t => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="preview">
+      <iframe src="resume.html?theme=${t.id}" loading="lazy" tabindex="-1"></iframe>
+    </div>
+    <div class="info">
+      <div class="focus">${t.focus}</div>
+      <h2>${t.name}</h2>
+      <p>${t.desc}</p>
+      <div class="actions">
+        <a class="btn-view" href="resume.html?theme=${t.id}">Ansehen</a>
+        <a class="btn-pdf" href="resume.html?theme=${t.id}" onclick="event.preventDefault(); window.open('resume.html?theme=${t.id}','_blank').addEventListener('load', function(){ this.print(); })">Als PDF</a>
+      </div>
+    </div>
+  `;
+  grid.appendChild(card);
+});
+</script>
+
+</body>
+</html>

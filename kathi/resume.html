@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Katharina Dude — CV</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;700&family=Space+Mono:wght@400;700&family=Courier+Prime:wght@400;700&family=DM+Sans:wght@400;500;700&family=Creepster&family=Bungee+Shade&family=Silkscreen&family=Mystery+Quest&family=Rubik+Glitch&family=Lacquer&family=Archivo+Black&family=Libre+Baskerville:wght@400;700&family=Josefin+Sans:wght@400;600;700&family=Fira+Code:wght@400;700&family=Lora:wght@400;700&family=Raleway:wght@400;600;700&family=Bitter:wght@400;700&family=Source+Serif+4:wght@400;600;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  /* ─── Print / PDF ─── */
+  @media print {
+    .controls { display: none !important; }
+    body { padding: 0 !important; margin: 0 !important; }
+    .resume { box-shadow: none !important; border: none !important; }
+  }
+
+  /* ─── Controls bar ─── */
+  .controls {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    padding: 10px 16px;
+    background: rgba(0,0,0,0.9); backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    font-family: 'Inter', sans-serif; font-size: 13px; color: #ccc;
+    flex-wrap: wrap;
+  }
+  .controls select {
+    padding: 6px 10px; border-radius: 6px; border: 1px solid #555;
+    background: #222; color: #fff; font-size: 13px; font-family: inherit;
+    cursor: pointer;
+  }
+  .controls button {
+    padding: 6px 16px; border-radius: 6px; border: none;
+    background: #2563eb; color: #fff; font-size: 13px; font-family: inherit;
+    cursor: pointer; font-weight: 600;
+  }
+  .controls button:hover { background: #1d4ed8; }
+
+  /* ─── Base layout ─── */
+  body {
+    margin: 0;
+    padding: 56px 24px 40px;
+    transition: background 0.5s, color 0.5s;
+  }
+  .resume {
+    max-width: 780px; margin: 0 auto; padding: 40px 48px;
+    transition: all 0.5s;
+  }
+  h1 { margin: 0 0 4px; transition: all 0.4s; }
+  .subtitle { margin: 0 0 16px; transition: all 0.4s; }
+  h2 { margin: 20px 0 8px; transition: all 0.4s; }
+  h3 { margin: 14px 0 2px; transition: all 0.4s; }
+  .meta { margin: 0 0 4px; transition: all 0.4s; }
+  p, li { transition: all 0.4s; }
+  ul { padding-left: 22px; margin: 4px 0 10px; }
+  li { margin-bottom: 3px; }
+  hr { border: none; margin: 16px 0; transition: all 0.4s; }
+  .section-grid { display: flex; flex-wrap: wrap; gap: 6px 16px; }
+  .section-grid span { white-space: nowrap; }
+  .two-col { display: grid; grid-template-columns: 200px 1fr; gap: 2px 16px; align-items: baseline; }
+  .two-col .left { text-align: right; }
+
+  /* ════════════════════════════════════════
+     THEME DEFINITIONS — 20 themes
+     ════════════════════════════════════════ */
+
+  /* 1 ── Professional ── */
+  body.t-professional { background: #fff; color: #1f2937; font-family: 'Inter', sans-serif; font-size: 12px; line-height: 1.6; }
+  .t-professional .resume { background: #fff; }
+  .t-professional h1 { font-size: 28px; font-weight: 700; color: #111; letter-spacing: -0.5px; }
+  .t-professional .subtitle { color: #6b7280; font-size: 12px; }
+  .t-professional h2 { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #111; border-bottom: 2px solid #111; padding-bottom: 3px; }
+  .t-professional h3 { font-size: 13px; font-weight: 600; color: #111; }
+  .t-professional .meta { color: #6b7280; font-size: 11px; }
+  .t-professional hr { height: 1px; background: #e5e7eb; }
+
+  /* 2 ── Dark Mode ── */
+  body.t-dark { background: #0f172a; color: #cbd5e1; font-family: 'DM Sans', sans-serif; font-size: 12px; line-height: 1.6; }
+  .t-dark .resume { background: #1e293b; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.4); }
+  .t-dark h1 { font-size: 28px; font-weight: 700; color: #f1f5f9; }
+  .t-dark .subtitle { color: #64748b; }
+  .t-dark h2 { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #38bdf8; border-bottom: 1px solid #334155; padding-bottom: 3px; }
+  .t-dark h3 { font-size: 13px; font-weight: 600; color: #e2e8f0; }
+  .t-dark .meta { color: #64748b; font-size: 11px; }
+  .t-dark hr { height: 1px; background: #334155; }
+
+  /* 3 ── Terminal ── */
+  body.t-terminal { background: #0a0a0a; color: #00ff41; font-family: 'Fira Code', monospace; font-size: 11px; line-height: 1.6; }
+  .t-terminal .resume { background: #0a0a0a; border: 1px solid #00ff41; border-radius: 0; }
+  .t-terminal h1 { font-size: 24px; color: #00ff41; font-weight: 700; }
+  .t-terminal h1::before { content: '> '; }
+  .t-terminal .subtitle { color: #008f11; }
+  .t-terminal h2 { font-size: 13px; color: #00ff41; border-bottom: 1px dashed #00ff41; padding-bottom: 2px; text-transform: uppercase; letter-spacing: 2px; }
+  .t-terminal h2::before { content: '## '; }
+  .t-terminal h3 { font-size: 12px; color: #39ff14; }
+  .t-terminal .meta { color: #008f11; font-size: 10px; }
+  .t-terminal hr { height: 1px; background: #003b00; }
+  .t-terminal ul { list-style: none; padding-left: 16px; }
+  .t-terminal li::before { content: '$ '; color: #008f11; }
+
+  /* 4 ── Elegant ── */
+  body.t-elegant { background: #faf8f5; color: #2d2926; font-family: 'Playfair Display', serif; font-size: 12px; line-height: 1.7; }
+  .t-elegant .resume { background: #faf8f5; border-top: 4px solid #b8860b; }
+  .t-elegant h1 { font-size: 32px; font-weight: 700; color: #1a1a1a; letter-spacing: 2px; }
+  .t-elegant .subtitle { color: #8b7355; font-style: italic; font-size: 12px; }
+  .t-elegant h2 { font-size: 16px; color: #b8860b; border-bottom: 1px solid #d4c5a9; padding-bottom: 4px; font-weight: 700; }
+  .t-elegant h3 { font-size: 13px; color: #2d2926; font-weight: 700; }
+  .t-elegant .meta { color: #8b7355; font-size: 11px; font-style: italic; }
+  .t-elegant hr { height: 1px; background: #d4c5a9; }
+
+  /* 5 ── Minimalist ── */
+  body.t-minimalist { background: #fff; color: #333; font-family: 'Raleway', sans-serif; font-size: 12px; line-height: 1.8; }
+  .t-minimalist .resume { background: #fff; padding: 60px; }
+  .t-minimalist h1 { font-size: 24px; font-weight: 300; color: #111; letter-spacing: 6px; text-transform: uppercase; }
+  .t-minimalist .subtitle { color: #999; font-size: 11px; letter-spacing: 2px; }
+  .t-minimalist h2 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; color: #999; border-bottom: none; padding-bottom: 0; }
+  .t-minimalist h3 { font-size: 12px; font-weight: 600; color: #333; }
+  .t-minimalist .meta { color: #aaa; font-size: 10px; letter-spacing: 1px; }
+  .t-minimalist hr { height: 1px; background: #eee; }
+
+  /* 6 ── Neon Cursed ── */
+  body.t-cursed { background: linear-gradient(135deg, #ff00ff, #00ffff, #ff6600, #39ff14, #ff0066); color: #ffff00; font-family: 'Mystery Quest', cursive; font-size: 11px; line-height: 1.4; }
+  .t-cursed .resume { background: rgba(0,0,0,0.8); border: 5px solid; border-image: repeating-linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet) 5; }
+  .t-cursed h1 { font-family: 'Bungee Shade', cursive; font-size: 36px; color: #ff0066; text-shadow: 4px 4px 0 #00ff00, -2px -2px 0 #0000ff; text-align: center; transform: rotate(-2deg); }
+  .t-cursed .subtitle { font-family: 'Silkscreen', monospace; color: #00ff00; text-align: center; font-size: 9px; }
+  .t-cursed h2 { font-family: 'Creepster', cursive; font-size: 22px; color: #39ff14; text-shadow: 3px 3px 0 #ff0000; border-bottom: 4px dotted #ff00ff; transform: skewX(-3deg); }
+  .t-cursed h3 { font-family: 'Lacquer', cursive; font-size: 13px; color: #ff6600; text-shadow: 2px 2px 0 #0000ff; }
+  .t-cursed .meta { font-family: 'Rubik Glitch', cursive; color: #00ffff; font-size: 10px; }
+  .t-cursed hr { height: 4px; background: repeating-linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet); background-size: 200px; }
+  .t-cursed ul { list-style-type: '\1F480 '; }
+
+  /* 7 ── Corporate Blue ── */
+  body.t-corporate { background: #f0f4f8; color: #1e3a5f; font-family: 'Inter', sans-serif; font-size: 12px; line-height: 1.6; }
+  .t-corporate .resume { background: #fff; border-left: 5px solid #1e3a5f; border-radius: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  .t-corporate h1 { font-size: 26px; font-weight: 700; color: #1e3a5f; }
+  .t-corporate .subtitle { color: #4a7ab5; font-size: 12px; }
+  .t-corporate h2 { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #fff; background: #1e3a5f; padding: 5px 10px; margin-left: -48px; margin-right: -48px; padding-left: 48px; border-bottom: none; }
+  .t-corporate h3 { font-size: 13px; font-weight: 600; color: #1e3a5f; }
+  .t-corporate .meta { color: #4a7ab5; font-size: 11px; }
+  .t-corporate hr { height: 0; }
+
+  /* 8 ── Pastel ── */
+  body.t-pastel { background: #fce4ec; color: #4a4a4a; font-family: 'Josefin Sans', sans-serif; font-size: 12px; line-height: 1.7; }
+  .t-pastel .resume { background: #fff5f7; border-radius: 16px; box-shadow: 0 4px 20px rgba(233,30,99,0.08); }
+  .t-pastel h1 { font-size: 28px; font-weight: 700; color: #c2185b; }
+  .t-pastel .subtitle { color: #e91e63; font-size: 12px; }
+  .t-pastel h2 { font-size: 14px; font-weight: 700; color: #c2185b; border-bottom: 2px solid #f8bbd0; padding-bottom: 3px; }
+  .t-pastel h3 { font-size: 13px; font-weight: 600; color: #880e4f; }
+  .t-pastel .meta { color: #e91e63; font-size: 11px; }
+  .t-pastel hr { height: 2px; background: linear-gradient(90deg, #f8bbd0, #e1bee7, #bbdefb); border-radius: 2px; }
+
+  /* 9 ── Bauhaus ── */
+  body.t-bauhaus { background: #f5f0e8; color: #1a1a1a; font-family: 'DM Sans', sans-serif; font-size: 12px; line-height: 1.6; }
+  .t-bauhaus .resume { background: #f5f0e8; border: 3px solid #1a1a1a; }
+  .t-bauhaus h1 { font-family: 'Archivo Black', sans-serif; font-size: 36px; color: #1a1a1a; text-transform: uppercase; letter-spacing: -1px; }
+  .t-bauhaus .subtitle { color: #cc0000; font-weight: 700; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; }
+  .t-bauhaus h2 { font-family: 'Archivo Black', sans-serif; font-size: 14px; color: #fff; background: #cc0000; display: inline-block; padding: 3px 12px; border-bottom: none; text-transform: uppercase; }
+  .t-bauhaus h3 { font-size: 13px; font-weight: 700; color: #003893; }
+  .t-bauhaus .meta { color: #666; font-size: 11px; }
+  .t-bauhaus hr { height: 3px; background: #1a1a1a; }
+
+  /* 10 ── Vaporwave ── */
+  body.t-vaporwave { background: linear-gradient(180deg, #1a0033, #0d001a); color: #e0b0ff; font-family: 'DM Sans', sans-serif; font-size: 12px; line-height: 1.6; }
+  .t-vaporwave .resume { background: rgba(26,0,51,0.6); border: 1px solid rgba(224,176,255,0.2); border-radius: 8px; }
+  .t-vaporwave h1 { font-size: 30px; font-weight: 700; color: #ff71ce; text-shadow: 0 0 20px rgba(255,113,206,0.5); letter-spacing: 4px; }
+  .t-vaporwave .subtitle { color: #01cdfe; font-size: 11px; letter-spacing: 2px; }
+  .t-vaporwave h2 { font-size: 13px; color: #05ffa1; border-bottom: 1px solid rgba(5,255,161,0.3); padding-bottom: 3px; text-transform: uppercase; letter-spacing: 2px; }
+  .t-vaporwave h3 { font-size: 13px; font-weight: 600; color: #b967ff; }
+  .t-vaporwave .meta { color: #01cdfe; font-size: 10px; }
+  .t-vaporwave hr { height: 1px; background: linear-gradient(90deg, #ff71ce, #01cdfe, #05ffa1, #b967ff); }
+
+  /* 11 ── Typewriter ── */
+  body.t-typewriter { background: #f4efe6; color: #2c2c2c; font-family: 'Courier Prime', monospace; font-size: 12px; line-height: 1.7; }
+  .t-typewriter .resume { background: #f4efe6; border: none; box-shadow: none; padding: 50px 60px; }
+  .t-typewriter h1 { font-size: 24px; font-weight: 700; text-transform: uppercase; letter-spacing: 4px; color: #2c2c2c; }
+  .t-typewriter .subtitle { color: #666; font-size: 11px; }
+  .t-typewriter h2 { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; border-bottom: 2px double #2c2c2c; padding-bottom: 4px; color: #2c2c2c; }
+  .t-typewriter h3 { font-size: 12px; font-weight: 700; color: #2c2c2c; }
+  .t-typewriter .meta { color: #888; font-size: 11px; }
+  .t-typewriter hr { height: 0; border-bottom: 1px dashed #aaa; }
+
+  /* 12 ── Nordic ── */
+  body.t-nordic { background: #e8edf2; color: #2e3440; font-family: 'Inter', sans-serif; font-size: 12px; line-height: 1.6; }
+  .t-nordic .resume { background: #eceff4; border-radius: 8px; box-shadow: 0 2px 12px rgba(46,52,64,0.06); }
+  .t-nordic h1 { font-size: 26px; font-weight: 700; color: #2e3440; }
+  .t-nordic .subtitle { color: #5e81ac; font-size: 12px; }
+  .t-nordic h2 { font-size: 13px; font-weight: 700; color: #5e81ac; text-transform: uppercase; letter-spacing: 1.5px; border-bottom: 2px solid #5e81ac; padding-bottom: 3px; }
+  .t-nordic h3 { font-size: 13px; font-weight: 600; color: #2e3440; }
+  .t-nordic .meta { color: #81a1c1; font-size: 11px; }
+  .t-nordic hr { height: 1px; background: #d8dee9; }
+
+  /* 13 ── Forest ── */
+  body.t-forest { background: #1b2d1b; color: #c8dcc8; font-family: 'Bitter', serif; font-size: 12px; line-height: 1.7; }
+  .t-forest .resume { background: #243524; border-radius: 4px; border: 1px solid #3a5a3a; }
+  .t-forest h1 { font-size: 28px; font-weight: 700; color: #8fbc8f; }
+  .t-forest .subtitle { color: #6b8e6b; font-size: 12px; }
+  .t-forest h2 { font-size: 14px; font-weight: 700; color: #8fbc8f; border-bottom: 1px solid #3a5a3a; padding-bottom: 3px; }
+  .t-forest h3 { font-size: 13px; font-weight: 700; color: #a9d4a9; }
+  .t-forest .meta { color: #6b8e6b; font-size: 11px; }
+  .t-forest hr { height: 1px; background: #3a5a3a; }
+
+  /* 14 ── Sunset ── */
+  body.t-sunset { background: linear-gradient(180deg, #1a0a2e, #2d1b4e, #5c2d6e); color: #f0d9ff; font-family: 'Lora', serif; font-size: 12px; line-height: 1.7; }
+  .t-sunset .resume { background: rgba(45,27,78,0.5); border: 1px solid rgba(255,140,66,0.2); border-radius: 8px; }
+  .t-sunset h1 { font-size: 30px; font-weight: 700; color: #ff8c42; }
+  .t-sunset .subtitle { color: #ffb347; font-size: 12px; }
+  .t-sunset h2 { font-size: 14px; font-weight: 700; color: #ff6b6b; border-bottom: 1px solid rgba(255,107,107,0.3); padding-bottom: 3px; }
+  .t-sunset h3 { font-size: 13px; font-weight: 700; color: #ffb347; }
+  .t-sunset .meta { color: #c49bff; font-size: 11px; }
+  .t-sunset hr { height: 1px; background: linear-gradient(90deg, #ff6b6b, #ff8c42, #ffb347); }
+
+  /* 15 ── Blueprint ── */
+  body.t-blueprint { background: #003366; color: #b8d4e8; font-family: 'Space Mono', monospace; font-size: 11px; line-height: 1.6; }
+  .t-blueprint .resume { background: #003d7a; border: 1px solid rgba(255,255,255,0.15); }
+  .t-blueprint h1 { font-size: 24px; color: #fff; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; }
+  .t-blueprint .subtitle { color: #7ab8e0; font-size: 10px; letter-spacing: 1px; }
+  .t-blueprint h2 { font-size: 12px; color: #fff; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 3px; }
+  .t-blueprint h3 { font-size: 11px; color: #a8d8ff; font-weight: 700; }
+  .t-blueprint .meta { color: #5a9ec4; font-size: 10px; }
+  .t-blueprint hr { height: 1px; background: rgba(255,255,255,0.1); }
+
+  /* 16 ── Vintage ── */
+  body.t-vintage { background: #f2e8d5; color: #3e2f1c; font-family: 'Libre Baskerville', serif; font-size: 12px; line-height: 1.7; }
+  .t-vintage .resume { background: #f7f0e3; border: 2px solid #c4a97d; border-radius: 0; }
+  .t-vintage h1 { font-size: 28px; font-weight: 700; color: #5c3d1a; letter-spacing: 2px; }
+  .t-vintage .subtitle { color: #8b6914; font-size: 12px; font-style: italic; }
+  .t-vintage h2 { font-size: 14px; font-weight: 700; color: #5c3d1a; border-bottom: 2px double #c4a97d; padding-bottom: 4px; text-transform: uppercase; letter-spacing: 2px; }
+  .t-vintage h3 { font-size: 13px; font-weight: 700; color: #5c3d1a; }
+  .t-vintage .meta { color: #8b6914; font-size: 11px; font-style: italic; }
+  .t-vintage hr { height: 0; border-bottom: 1px solid #c4a97d; }
+
+  /* 17 ── Glassmorphism ── */
+  body.t-glass { background: linear-gradient(135deg, #667eea, #764ba2); color: #1a1a2e; font-family: 'DM Sans', sans-serif; font-size: 12px; line-height: 1.6; }
+  .t-glass .resume { background: rgba(255,255,255,0.2); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.3); border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); color: #fff; }
+  .t-glass h1 { font-size: 28px; font-weight: 700; color: #fff; }
+  .t-glass .subtitle { color: rgba(255,255,255,0.7); font-size: 12px; }
+  .t-glass h2 { font-size: 13px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 1.5px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 3px; }
+  .t-glass h3 { font-size: 13px; font-weight: 600; color: #fff; }
+  .t-glass .meta { color: rgba(255,255,255,0.6); font-size: 11px; }
+  .t-glass li { color: rgba(255,255,255,0.9); }
+  .t-glass p { color: rgba(255,255,255,0.9); }
+  .t-glass hr { height: 1px; background: rgba(255,255,255,0.15); }
+
+  /* 18 ── Brutalist ── */
+  body.t-brutalist { background: #fff; color: #000; font-family: 'Archivo Black', sans-serif; font-size: 12px; line-height: 1.5; }
+  .t-brutalist .resume { background: #fff; border: 4px solid #000; padding: 30px; }
+  .t-brutalist h1 { font-size: 48px; color: #000; text-transform: uppercase; line-height: 1; margin-bottom: 8px; }
+  .t-brutalist .subtitle { font-family: 'Space Mono', monospace; color: #000; font-size: 11px; text-transform: uppercase; letter-spacing: 2px; border: 2px solid #000; display: inline-block; padding: 4px 8px; }
+  .t-brutalist h2 { font-size: 18px; color: #000; text-transform: uppercase; border-bottom: 4px solid #000; padding-bottom: 4px; }
+  .t-brutalist h3 { font-family: 'Space Mono', monospace; font-size: 12px; color: #000; font-weight: 700; }
+  .t-brutalist .meta { font-family: 'Space Mono', monospace; color: #555; font-size: 10px; text-transform: uppercase; }
+  .t-brutalist hr { height: 4px; background: #000; }
+  .t-brutalist li { font-family: 'DM Sans', sans-serif; font-weight: 400; }
+
+  /* 19 ── Candy ── */
+  body.t-candy { background: #fff0f5; color: #4a1942; font-family: 'Josefin Sans', sans-serif; font-size: 12px; line-height: 1.7; }
+  .t-candy .resume { background: #fff; border-radius: 20px; box-shadow: 8px 8px 0 #ff69b4; border: 2px solid #ff69b4; }
+  .t-candy h1 { font-size: 30px; font-weight: 700; color: #ff1493; }
+  .t-candy .subtitle { color: #ff69b4; font-size: 12px; }
+  .t-candy h2 { font-size: 14px; font-weight: 700; color: #ff1493; border-bottom: 2px dashed #ffb6c1; padding-bottom: 3px; }
+  .t-candy h3 { font-size: 13px; font-weight: 600; color: #c71585; }
+  .t-candy .meta { color: #db7093; font-size: 11px; }
+  .t-candy hr { height: 2px; background: linear-gradient(90deg, #ff69b4, #ff1493, #ff69b4); }
+
+  /* 20 ── Source Serif ── */
+  body.t-academic { background: #fff; color: #333; font-family: 'Source Serif 4', serif; font-size: 12px; line-height: 1.7; }
+  .t-academic .resume { background: #fff; border-top: 1px solid #333; border-bottom: 1px solid #333; border-radius: 0; padding: 40px 50px; }
+  .t-academic h1 { font-size: 24px; font-weight: 700; color: #1a1a1a; text-align: center; }
+  .t-academic .subtitle { text-align: center; color: #555; font-size: 11px; }
+  .t-academic h2 { font-size: 14px; font-weight: 700; color: #1a1a1a; border-bottom: 1px solid #999; padding-bottom: 2px; font-variant: small-caps; letter-spacing: 1px; }
+  .t-academic h3 { font-size: 13px; font-weight: 700; color: #333; }
+  .t-academic .meta { color: #777; font-size: 11px; font-style: italic; }
+  .t-academic hr { height: 0; border-bottom: 1px dotted #ccc; }
+
+</style>
+</head>
+<body class="t-professional">
+
+<div class="controls">
+  <label for="themePicker">Theme:</label>
+  <select id="themePicker">
+    <option value="t-professional">1 — Professional</option>
+    <option value="t-dark">2 — Dark Mode</option>
+    <option value="t-terminal">3 — Terminal</option>
+    <option value="t-elegant">4 — Elegant Gold</option>
+    <option value="t-minimalist">5 — Minimalist</option>
+    <option value="t-cursed">6 — Neon Cursed</option>
+    <option value="t-corporate">7 — Corporate Blue</option>
+    <option value="t-pastel">8 — Pastel</option>
+    <option value="t-bauhaus">9 — Bauhaus</option>
+    <option value="t-vaporwave">10 — Vaporwave</option>
+    <option value="t-typewriter">11 — Typewriter</option>
+    <option value="t-nordic">12 — Nordic</option>
+    <option value="t-forest">13 — Forest</option>
+    <option value="t-sunset">14 — Sunset</option>
+    <option value="t-blueprint">15 — Blueprint</option>
+    <option value="t-vintage">16 — Vintage</option>
+    <option value="t-glass">17 — Glassmorphism</option>
+    <option value="t-brutalist">18 — Brutalist</option>
+    <option value="t-candy">19 — Candy</option>
+    <option value="t-academic">20 — Academic</option>
+  </select>
+  <button onclick="window.print()">Save as PDF</button>
+</div>
+
+<div class="resume">
+
+<h1>Katharina Dude</h1>
+<div class="subtitle">Personalentwicklung | HR Business Partnerin | Beratung | Vertrieb | Business Coach | Mentorin<br>Frankfurt am Main</div>
+
+<hr>
+
+<h2>Profil</h2>
+<p>Langjährige Expertise in der strategischen Personalbegleitung und im Coaching mit Fokus auf nachhaltige Organisationsentwicklung und Vertriebsoptimierung.</p>
+
+<hr>
+
+<h2>Skills</h2>
+<div class="section-grid">
+  <span>Personalentwicklung</span><span>HR Business Partnering</span><span>Strategische Beratung</span><span>Vertrieb</span><span>Business Coaching</span><span>Mentoring</span><span>Change Management</span><span>Projektmanagement</span><span>Recruiting</span><span>Organisationsentwicklung</span><span>Workshopmoderation</span><span>Talent Management</span><span>Arbeitsrecht</span><span>Scrum Product Owner</span><span>KI-Tools</span><span>Agile Methoden</span><span>Remote Sales</span><span>Digitale Kollaboration</span>
+</div>
+
+<hr>
+
+<h2>Sprachen</h2>
+<p>Deutsch (Muttersprache) &nbsp;&bull;&nbsp; Englisch (verhandlungssicher)</p>
+
+<hr>
+
+<h2>Berufserfahrung</h2>
+
+<h3>Consultant Entwicklungsprogramme | Weiterbildungsanbieter, Frankfurt</h3>
+<div class="meta">Januar 2019 — heute</div>
+<ul>
+  <li>End-to-End Vertriebssteuerung: Ganzheitliche Begleitung des Sales-Cycles von Bedarfserhebung bis Umsetzung</li>
+  <li>Strategische Beratung: Entwicklung maßgeschneiderter Konzepte für Personalentwicklung und Organisationsberatung</li>
+  <li>Workshop-Moderation: Konzeptions-Workshops zur Gestaltung modularer Entwicklungsprogramme</li>
+  <li>Revenue Growth: Steigerung des Projektvolumens durch Upselling- und Cross-Selling bei Bestandskunden</li>
+  <li>Recruiting & Partner-Management: Auswahl, Onboarding und Bindung neuer Trainer:innen und Berater:innen</li>
+  <li>Remote-Sales & Digitale Beratung: Ortsunabhängige Vertriebssteuerung via Videokonferenz bis Vertragsabschluss</li>
+  <li>Virtuelle Konzeption: Remote-Workshops mit Miro, Mural, MS Teams</li>
+  <li>Digitale Kollaboration: Verteilte Teams via Slack, Asana, Jira</li>
+</ul>
+
+<h3>Auslandsaufenthalt & Neuorientierung | Neuseeland & Pazifik-Region</h3>
+<div class="meta">September 2017 — August 2018</div>
+<ul>
+  <li>Interkulturelle Kompetenz: Verhandlungssichere Kommunikation in Englisch in diversen kulturellen Kontexten</li>
+  <li>Selbstorganisation: Eigenständige Planung und Durchführung einer 11-monatigen Individualreise</li>
+  <li>Strategische Neuorientierung und Schärfung des beruflichen Profils</li>
+</ul>
+
+<h3>Referentin Personalentwicklung (global) | JOST Werke GmbH, Neu-Isenburg</h3>
+<div class="meta">August 2012 — Juli 2017</div>
+<ul>
+  <li>Strategische Personalentwicklung: Konzeption der globalen PE-Strategie und Implementierung bedarfsgerechter Qualifizierungskonzepte</li>
+  <li>Change Management & Leadership: Moderation interner Workshops zu kulturellem Wandel und Führungskompetenzen</li>
+  <li>Internationales Coaching & Beratung für Führungskräfte und Mitarbeitende im In- und Ausland</li>
+  <li>Projektmanagement: Koordination komplexer HR-Sonderprojekte, Einführung von Qualifikationsmatrix und Mitarbeitergesprächen</li>
+  <li>Qualitätssicherung: Vorbereitung und Durchführung internationaler HR-Audits</li>
+  <li>Talent Management: Umsetzung interner Karrierepfade, Mitarbeiterbindung und Nachfolgeplanung</li>
+</ul>
+
+<h3>Personalreferentin Personalbetreuung | BIOTRONIK SE & Co.KG, Berlin</h3>
+<div class="meta">Januar 2011 — Juni 2012</div>
+<ul>
+  <li>Strategische Beratung & Coaching von Führungskräften in allen personalrelevanten Fragestellungen</li>
+  <li>Personal- & Nachfolgeplanung: Strategische Personalbedarfsplanung und Talentsicherung</li>
+  <li>End-to-End Recruiting: Steuerung der Personalakquisition, Beförderungsprozesse und Mitarbeiterentwicklung</li>
+  <li>Arbeitsrechtliche Expertise: Arbeits-, tarif- und sozialversicherungsrechtliche Fragestellungen</li>
+  <li>Eigenverantwortliche Zusammenarbeit mit dem Betriebsrat</li>
+</ul>
+
+<h3>Referentin Personal und Kommunikation | Laurent Reifen GmbH, Brandenburg</h3>
+<div class="meta">Mai 2007 — Dezember 2010</div>
+<ul>
+  <li>Strategische Gremienarbeit: Mitglied des Direktionsteams und diverser Arbeitsgruppen</li>
+  <li>Projektleitung: Strategische Managementprojekte (Arbeitszeitregelungen, Demografiefonds)</li>
+  <li>Betriebsratsmanagement: Anhörungen, Verhandlungen, Betriebsvereinbarungen</li>
+  <li>Compliance & Datenschutz: AGG-Beauftragte, datenschutzrechtliche Anforderungen</li>
+  <li>L&D: Steuerung der Aus- und Weiterbildungsprozesse inkl. Bedarfsermittlung und Budgetplanung</li>
+  <li>Full Cycle Recruiting: Employee Life Cycle vom Onboarding bis Offboarding</li>
+  <li>HR-Administration: Personalverwaltung für ca. 180 Mitarbeiter</li>
+  <li>Betriebliches Gesundheitsmanagement: Leitung des Gesundheitskreises, präventive Angebote</li>
+</ul>
+
+<h3>Arzthelferin | Gynäkologiepraxis Felix Schümchen</h3>
+<div class="meta">Juli 1999 — Juli 2000</div>
+
+<hr>
+
+<h2>Ausbildung</h2>
+
+<h3>Studium der Diplompädagogik | Freie Universität Berlin</h3>
+<div class="meta">Oktober 1999 — September 2006 &nbsp;|&nbsp; Schwerpunkt: Erwachsenenbildung und berufliche Weiterbildung</div>
+
+<h3>Ausbildung zur Arzthelferin | Berlin</h3>
+<div class="meta">September 1996 — Juli 1999</div>
+
+<h3>Allgemeine Hochschulreife | OSZ Wirtschaft, Verwaltung und Recht, Berlin</h3>
+<div class="meta">August 1992 — Mai 1996</div>
+
+<hr>
+
+<h2>Ehrenamt</h2>
+
+<h3>Gründerin & Netzwerk-Strategin | Frankfurt am Main</h3>
+<div class="meta">März 2014 — Dezember 2019</div>
+<ul>
+  <li>Aufbau eines Experten-Netzwerks für Personal- und Organisationsentwickler:innen</li>
+  <li>Konzeption und Durchführung von Live-Treffen zur Förderung der regionalen HR-Community</li>
+</ul>
+
+<h3>Mentorin | Projekt "NeW Mentoring", Jumpp — Frauenbetriebe e.V.</h3>
+<div class="meta">März 2015 — Dezember 2015</div>
+<ul>
+  <li>Begleitung und Beratung von Frauen beim beruflichen Wiedereinstieg und Selbständigkeit</li>
+</ul>
+
+<h3>Mentorin | DREAM Mentoring, Dahlem Research School, Berlin</h3>
+<div class="meta">November 2011 — Dezember 2012</div>
+<ul>
+  <li>Beratung von Promovierenden im Rahmen der akademischen Laufbahnplanung</li>
+</ul>
+
+<hr>
+
+<h2>Qualifikationen & Weiterbildungen</h2>
+<div class="section-grid">
+  <span>Scrum Product Owner (zertifiziert)</span>
+  <span>Business Coach (DGFP)</span>
+  <span>ActeeChange® (zertifiziert)</span>
+  <span>Systemische Organisationsentwicklung</span>
+  <span>Agile Methoden</span>
+  <span>Projektmanagement</span>
+  <span>KI-Tools</span>
+  <span>Professionell Verhandeln</span>
+  <span>Blended Learning Konzeption</span>
+  <span>Gewaltfreie Kommunikation (Rosenberg)</span>
+  <span>Transaktionsanalyse TA 101</span>
+  <span>Kulturprofil-Indikator®</span>
+</div>
+
+</div>
+
+<script>
+const picker = document.getElementById('themePicker');
+const themes = [...picker.options].map(o => o.value);
+
+function playWarp() {
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.type = 'sawtooth';
+  const now = ctx.currentTime;
+  osc.frequency.setValueAtTime(120, now);
+  osc.frequency.exponentialRampToValueAtTime(1200, now + 0.25);
+  osc.frequency.exponentialRampToValueAtTime(80, now + 0.4);
+  gain.gain.setValueAtTime(0.2, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+  osc.start(now);
+  osc.stop(now + 0.45);
+}
+
+function setTheme(t, pushState) {
+  document.body.className = t;
+  picker.value = t;
+  if (pushState) {
+    const url = new URL(window.location);
+    url.searchParams.set('theme', t);
+    history.replaceState(null, '', url);
+  }
+}
+
+picker.addEventListener('change', () => {
+  setTheme(picker.value, true);
+  playWarp();
+});
+
+// Read theme from URL
+const params = new URLSearchParams(window.location.search);
+const urlTheme = params.get('theme');
+if (urlTheme && themes.includes(urlTheme)) {
+  setTheme(urlTheme, false);
+}
+</script>
+
+</body>
+</html>
